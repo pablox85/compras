@@ -6,7 +6,7 @@ type ItemModalProps = {
   isOpen: boolean;
   categoria: string;
   onClose: () => void;
-  onSave: (nombre: string, cantidad: number, usuario: string) => void;
+  onSave: (nombre: string, cantidad: number) => void;
 };
 
 export default function ItemModal({
@@ -17,15 +17,7 @@ export default function ItemModal({
 }: ItemModalProps) {
   const [nombre, setNombre] = useState("");
   const [cantidad, setCantidad] = useState(1);
-  const [usuario, setUsuario] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const userLogin = localStorage.getItem("userLogin");
-    if (userLogin) {
-      setUsuario(userLogin);
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -35,11 +27,10 @@ export default function ItemModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nombre.trim() && usuario.trim()) {
-      onSave(nombre, cantidad, usuario);
+    if (nombre.trim()) {
+      onSave(nombre, cantidad);
       setNombre("");
       setCantidad(1);
-      setUsuario("");
     }
   };
 

@@ -4,11 +4,10 @@ import { useState } from "react";
 import PanelTitle from "./PanelTitle";
 import AddDropdown from "./AddDropdown";
 import ItemModal from "./ItemModal";
-import { useCompras, type Compra } from "@/app/hooks/useCompras";
+import { useCompras } from "@/app/hooks/useCompras";
 
 type PanelMandadosProps = {
   active: boolean;
-  selectedPanel: "surtido" | "mandados";
   onSelectPanel: (panel: "surtido" | "mandados") => void;
   data: ReturnType<typeof useCompras>["data"];
   isHydrated: boolean;
@@ -18,7 +17,6 @@ type PanelMandadosProps = {
 
 export default function PanelMandados({
   active,
-  selectedPanel,
   onSelectPanel,
   data,
   isHydrated,
@@ -34,8 +32,8 @@ export default function PanelMandados({
     setModalOpen(true);
   };
 
-  const handleSaveItem = (nombre: string, cantidad: number, usuario: string) => {
-    addCompra("mandados", selectedCategory, nombre, cantidad, usuario);
+  const handleSaveItem = (nombre: string, cantidad: number) => {
+    void addCompra("mandados", selectedCategory, nombre, cantidad);
     setModalOpen(false);
     setSelectedCategory("");
   };
@@ -100,7 +98,7 @@ export default function PanelMandados({
                       >
                         <div>
                           {compra.nombre} <span className="text-slate-400">({compra.cantidad})</span>{" "}
-                          <span className="text-xs text-slate-500">por {compra.usuario}</span>
+                          <span className="text-xs text-slate-500">por {compra.created_by_login}</span>
                         </div>
                         <button
                           onClick={() => removeCompra("mandados", compra.id)}
@@ -124,7 +122,7 @@ export default function PanelMandados({
                   <div>
                     <span className="text-emerald-300">{compra.categoria}</span> · {compra.nombre}{" "}
                     <span className="text-slate-400">({compra.cantidad})</span>{" "}
-                    <span className="text-xs text-slate-500">por {compra.usuario}</span>
+                    <span className="text-xs text-slate-500">por {compra.created_by_login}</span>
                   </div>
                   <button
                     onClick={() => removeCompra("mandados", compra.id)}

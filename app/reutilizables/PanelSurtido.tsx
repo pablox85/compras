@@ -4,11 +4,10 @@ import { useState } from "react";
 import PanelTitle from "./PanelTitle";
 import AddDropdown from "./AddDropdown";
 import ItemModal from "./ItemModal";
-import { useCompras, type Compra } from "@/app/hooks/useCompras";
+import { useCompras } from "@/app/hooks/useCompras";
 
 type PanelSurtidoProps = {
   active: boolean;
-  selectedPanel: "surtido" | "mandados";
   onSelectPanel: (panel: "surtido" | "mandados") => void;
   data: ReturnType<typeof useCompras>["data"];
   isHydrated: boolean;
@@ -18,7 +17,6 @@ type PanelSurtidoProps = {
 
 export default function PanelSurtido({
   active,
-  selectedPanel,
   onSelectPanel,
   data,
   isHydrated,
@@ -34,8 +32,8 @@ export default function PanelSurtido({
     setModalOpen(true);
   };
 
-  const handleSaveItem = (nombre: string, cantidad: number, usuario: string) => {
-    addCompra("surtido", selectedCategory, nombre, cantidad, usuario);
+  const handleSaveItem = (nombre: string, cantidad: number) => {
+    void addCompra("surtido", selectedCategory, nombre, cantidad);
     setModalOpen(false);
     setSelectedCategory("");
   };
@@ -98,10 +96,10 @@ export default function PanelSurtido({
                       key={compra.id}
                       className="flex items-center justify-between rounded-lg border border-slate-700 bg-slate-800/40 px-3 py-2 text-sm text-slate-200"
                     >
-                      <div>
-                        {compra.nombre} <span className="text-slate-400">({compra.cantidad})</span>{" "}
-                        <span className="text-xs text-slate-500">por {compra.usuario}</span>
-                      </div>
+                        <div>
+                          {compra.nombre} <span className="text-slate-400">({compra.cantidad})</span>{" "}
+                          <span className="text-xs text-slate-500">por {compra.created_by_login}</span>
+                        </div>
                       <button
                         onClick={() => removeCompra("surtido", compra.id)}
                         className="text-xs text-slate-500 hover:text-red-400"
@@ -124,7 +122,7 @@ export default function PanelSurtido({
                 <div>
                   <span className="text-emerald-300">{compra.categoria}</span> · {compra.nombre}{" "}
                   <span className="text-slate-400">({compra.cantidad})</span>{" "}
-                  <span className="text-xs text-slate-500">por {compra.usuario}</span>
+                  <span className="text-xs text-slate-500">por {compra.created_by_login}</span>
                 </div>
                 <button
                   onClick={() => removeCompra("surtido", compra.id)}
